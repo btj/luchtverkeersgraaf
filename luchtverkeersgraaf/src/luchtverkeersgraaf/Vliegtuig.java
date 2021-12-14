@@ -12,19 +12,30 @@ public class Vliegtuig {
 	/**
 	 * @invar | lvc != null
 	 * @invar | 0 <= snelheid
-	 * @invar | lvc.vliegtuigen.contains(this)
-	 * 
-	 * @peerObject
 	 */
-	LVC lvc;
-	int snelheid;
+	private LVC lvc;
+	private int snelheid;
+	
+	/**
+	 * @invar | getLVCInternal().getVliegtuigenInternal().contains(this)
+	 * 
+	 * @post | result != null
+	 * @peerObject (package-level)
+	 */
+	LVC getLVCInternal() { return lvc; }
+	
+	/**
+	 * @post | 0 <= result
+	 * @return
+	 */
+	int getSnelheidInternal() { return snelheid; }
 	
 	/**
 	 * @peerObject
 	 */
-	public LVC getLVC() { return lvc; }
+	public LVC getLVC() { return getLVCInternal(); }
 	
-	public int getSnelheid() { return snelheid; }
+	public int getSnelheid() { return getSnelheidInternal(); }
 	
 	/**
 	 * @pre | lvc != null
@@ -35,7 +46,7 @@ public class Vliegtuig {
 	 */
 	public Vliegtuig(LuchthavenLVC lvc) {
 		this.lvc = lvc;
-		lvc.vliegtuigen.add(this);
+		lvc.addVliegtuig(this);
 	}
 	
 	/**
@@ -56,9 +67,9 @@ public class Vliegtuig {
 	 * @post | getLVC().getVliegtuigen().equals(LogicalSet.plus(old(lvc.getVliegtuigen()), this))
 	 */
 	public void draagOverAan(LVC lvc) {
-		this.lvc.vliegtuigen.remove(this);
+		this.lvc.removeVliegtuig(this);
 		this.lvc = lvc;
-		this.lvc.vliegtuigen.add(this);
+		this.lvc.addVliegtuig(this);
 	}
 	
 }

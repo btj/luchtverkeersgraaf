@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import logicalcollections.LogicalSet;
+
 /**
  * @invar | getVliegtuigen() != null
  * @invar | getVliegtuigen().stream().allMatch(v -> v != null && v.getLVC() == this)
@@ -14,18 +16,45 @@ public abstract class LVC {
 	
 	/**
 	 * @invar | vliegtuigen != null
-	 * @invar | vliegtuigen.stream().allMatch(v -> v != null && v.lvc == this)
+	 * @invar | vliegtuigen.stream().allMatch(v -> v != null)
 	 * 
 	 * @representationObject
-	 * @peerObjects
 	 */
-	Set<Vliegtuig> vliegtuigen = new HashSet<>();
+	private Set<Vliegtuig> vliegtuigen = new HashSet<>();
 
+	/**
+	 * @invar | getVliegtuigenInternal().stream().allMatch(v -> v.getLVCInternal() == this)
+	 * 
+	 * @post | result != null
+	 * @post | result.stream().allMatch(v -> v != null)
+	 * 
+	 * @peerObjects (package-level)
+	 */
+	Set<Vliegtuig> getVliegtuigenInternal() { return Set.copyOf(vliegtuigen); }
+	
+	/**
+	 * @pre | vliegtuig != null
+	 * @mutates | this
+	 * @post | getVliegtuigenInternal().equals(LogicalSet.plus(old(getVliegtuigenInternal()), vliegtuig))
+	 */
+	void addVliegtuig(Vliegtuig vliegtuig) {
+		vliegtuigen.add(vliegtuig);
+	}
+	
+	/**
+	 * @pre | vliegtuig != null
+	 * @mutates | this
+	 * @post | getVliegtuigenInternal().equals(LogicalSet.minus(old(getVliegtuigenInternal()), vliegtuig))
+	 */
+	void removeVliegtuig(Vliegtuig vliegtuig) {
+		vliegtuigen.remove(vliegtuig);
+	}
+	
 	/**
 	 * @creates | result
 	 * @peerObjects
 	 */
-	public Set<Vliegtuig> getVliegtuigen() { return Set.copyOf(vliegtuigen); }
+	public Set<Vliegtuig> getVliegtuigen() { return getVliegtuigenInternal(); }
 	
 	/**
 	 * @pre | vliegtuig != null

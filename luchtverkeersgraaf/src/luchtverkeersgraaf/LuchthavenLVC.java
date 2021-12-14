@@ -8,9 +8,11 @@ public class LuchthavenLVC extends LVC {
 	/**
 	 * @invar | 1 <= aantalGates
 	 */
-	int aantalGates;
+	private int aantalGates;
 	
-	public int getAantalGates() { return aantalGates; }
+	int getAantalGatesInternal() { return aantalGates; }
+	
+	public int getAantalGates() { return getAantalGatesInternal(); }
 	
 	/**
 	 * @pre | 1 <= aantalGates
